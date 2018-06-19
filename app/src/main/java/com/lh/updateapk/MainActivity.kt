@@ -47,7 +47,7 @@ class MainActivity : AppCompatActivity(), UpdateCheckTask.OnCheckListener {
         registerReceiver(mReceiver, intentFilter)
     }
 
-    private val REQUESTPERMISSION = 110
+    private val WRITE_EXTERNAL_STORAGE = 110
 
     private fun update() {
         mDownloadIntent = Intent(this, DownloadService::class.java)
@@ -55,15 +55,15 @@ class MainActivity : AppCompatActivity(), UpdateCheckTask.OnCheckListener {
         mDownloadIntent?.putExtra(Constants.APK_MD5, mUpdateInfo?.mMD5)
         mDownloadIntent?.putExtra(Constants.APK_DIFF_UPDATE, mUpdateInfo?.mDiffUpdate)
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, listOf(Manifest.permission.WRITE_EXTERNAL_STORAGE).toTypedArray(),REQUESTPERMISSION)
-        } else {
+            ActivityCompat.requestPermissions(this, listOf(Manifest.permission.WRITE_EXTERNAL_STORAGE).toTypedArray(),WRITE_EXTERNAL_STORAGE)
+        }else {
             startService(mDownloadIntent)
         }
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (requestCode == REQUESTPERMISSION) {
+        if (requestCode == WRITE_EXTERNAL_STORAGE) {
             if (permissions[0] == Manifest.permission.WRITE_EXTERNAL_STORAGE) {
                 if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     if (mDownloadIntent != null)
