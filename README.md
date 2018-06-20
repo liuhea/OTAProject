@@ -1,2 +1,0 @@
-# UpdateApkProject
-UpdateApkProject
