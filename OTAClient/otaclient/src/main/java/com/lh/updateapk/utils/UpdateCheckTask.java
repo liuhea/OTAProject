@@ -16,6 +16,10 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+import cn.xtev.lib.download.utils.GsonUtils;
+import cn.xtev.lib.download.utils.PackageUtils;
+import cn.xtev.lib.download.utils.ThreadUtils;
+
 /**
  * Created by liuhe on 18/06/19.
  */
@@ -52,7 +56,7 @@ public class UpdateCheckTask extends AsyncTask<Void, Void, String> {
         InputStream is = null;
         BufferedReader buffer = null;
         String result = null;
-        String urlStr = Constants.UPDATE_REQUEST_URL + "?" + Constants.APK_VERSION_CODE + "=" + InfoUtils.INSTANCE.getVersionCode(this.mContext);
+        String urlStr = Constants.UPDATE_REQUEST_URL + "?" + Constants.APK_VERSION_CODE + "=" + PackageUtils.getAppVersionCode(this.mContext);
 
         try {
             URL url = new URL(urlStr);
@@ -69,7 +73,12 @@ public class UpdateCheckTask extends AsyncTask<Void, Void, String> {
             result = strBuilder.toString();
         } catch (Exception e) {
             Log.e(TAG, "http post error");
-            Toast.makeText(mContext,"服务尚未开启",Toast.LENGTH_SHORT).show();
+            ThreadUtils.runOnUIThread(new Runnable() {
+                @Override
+                public void run() {
+                    Toast.makeText(mContext,"服务尚未开启",Toast.LENGTH_SHORT).show();
+                }
+            });
         } finally {
             if (buffer != null) {
                 try {

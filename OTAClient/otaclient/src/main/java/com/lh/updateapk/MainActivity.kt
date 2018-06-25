@@ -7,8 +7,6 @@ import kotlinx.android.synthetic.main.activity_main.*
 import android.content.Intent
 import android.content.BroadcastReceiver
 import android.content.Context
-import android.view.View
-import com.lh.updateapk.utils.InfoUtils
 import com.lh.updateapk.utils.UpdateCheckTask
 import com.lh.updateapk.service.DownloadService
 import com.lh.updateapk.Constants.SERVICE_RECEIVER
@@ -17,8 +15,8 @@ import android.content.pm.PackageManager
 import android.graphics.Color
 import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
-import android.widget.Toast
-import java.util.zip.ZipFile
+import android.view.View
+import cn.xtev.lib.download.utils.PackageUtils
 
 /**
  * Created by liuhe on 18/06/19.
@@ -33,15 +31,16 @@ class MainActivity : AppCompatActivity(), UpdateCheckTask.OnCheckListener {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         txt_main_version.text =
-                "versionName：${InfoUtils.getVersionName(this)} " +
-                "versionCode：${InfoUtils.getVersionCode(this)}"
+                "versionName：${PackageUtils.getAppVersionName(this)} " +
+                "versionCode：${PackageUtils.getAppVersionCode(this)}"
 
-//        println("getFilesDir().getAbsolutePath()" + filesDir.absolutePath)
+        println("getFilesDir().getAbsolutePath()" + filesDir.absolutePath)
 
 
         txt_main_version.setBackgroundColor(Color.GREEN)
         btn_main_update_message.setOnClickListener {
             UpdateCheckTask(this@MainActivity, this).execute()
+            PackageUtils.install(this,"")
         }
         btn_main_update.setOnClickListener {
             update()
@@ -90,7 +89,7 @@ class MainActivity : AppCompatActivity(), UpdateCheckTask.OnCheckListener {
                 "versionName：${info?.mVersionName}\n" +
                 "versionCode：${info?.mVersionCode}"
 
-        btn_main_update.visibility = if (InfoUtils.getVersionCode(this) >= info?.mVersionCode!!) View.GONE else View.VISIBLE
+        btn_main_update.visibility = if (PackageUtils.getAppVersionCode(this) >= info?.mVersionCode!!) View.GONE else View.VISIBLE
     }
 
     override fun onFailed() {

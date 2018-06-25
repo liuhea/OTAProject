@@ -1,1 +1,1 @@
-include ':otaclient'
+include ':otaclient', ':lib_download'

@@ -1,4 +1,4 @@
-package com.lh.updateapk.utils;
+package cn.xtev.lib.download.utils;
 
 import android.text.TextUtils;
 import android.util.Log;
@@ -9,8 +9,10 @@ import java.io.IOException;
 import java.security.MessageDigest;
 
 /**
- * 	apk 签名信息获取工具类
- * Created by liuhe on 18/06/19.
+ * 签名信息获取工具类
+ *
+ * @author liuhe
+ * @date 2018-06-23
  */
 public class SignUtils {
 

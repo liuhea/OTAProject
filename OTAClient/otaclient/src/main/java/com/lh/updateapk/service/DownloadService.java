@@ -10,12 +10,14 @@ import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.FileProvider;
 import android.util.Log;
 
-import com.lh.updateapk.utils.PatchUtils;
+import cn.xtev.lib.download.utils.PackageUtils;
+import cn.xtev.lib.download.utils.PatchUtils;
 import com.lh.updateapk.BuildConfig;
 import com.lh.updateapk.Constants;
 import com.lh.updateapk.R;
-import com.lh.updateapk.utils.InfoUtils;
-import com.lh.updateapk.utils.StorageUtils;
+
+import cn.xtev.lib.download.utils.StorageUtils;
+import cn.xtev.lib.download.utils.ZipUtils;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -88,11 +90,12 @@ public class DownloadService extends IntentService {
             }
             // 下载完成
             Log.i(TAG, "Download finished!!..");
+//            ZipUtils.unzipFile(downloadFile,getExternalCacheDir());
 
             File apkFile = downloadFile;
             if (isDiff) {
                 // 增量式升级，先将patch合成新apk
-                String oldApkPath = InfoUtils.INSTANCE.getBaseApkPath(getApplicationContext());
+                String oldApkPath = PackageUtils.getBaseApkPath(getApplicationContext());
                 String newApkName = "update.apk";
                 String newApkPath = dir.getPath() + File.separator + newApkName;
                 String patchPath = downloadFile.getPath();

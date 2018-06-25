@@ -1,4 +1,4 @@
-package com.lh.updateapk.utils;
+package cn.xtev.lib.download.utils;
 
 import android.content.Context;
 import android.content.pm.PackageManager;
@@ -11,7 +11,8 @@ import java.io.IOException;
 import static android.os.Environment.MEDIA_MOUNTED;
 
 /**
- * Created by liuhe on 18/06/19.
+ * @author liuhe
+ * @date 18/06/19
  */
 public class StorageUtils {
 

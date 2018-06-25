@@ -1,4 +1,4 @@
-package com.lh.updateapk.utils;
+package cn.xtev.lib.download.utils;
 
 import android.util.Log;
 
@@ -6,10 +6,11 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.Gson;
 
 /**
+ * json解析工具类
+ *
  * @author liuhe
  * @created 2017/8/3
  */
-
 public class GsonUtils {
     private static final String TAG = GsonUtils.class.getName();
 
