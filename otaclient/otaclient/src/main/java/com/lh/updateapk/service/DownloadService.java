@@ -10,7 +10,7 @@ import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.FileProvider;
 import android.util.Log;
 
-import com.cundong.utils.PatchUtils;
+import com.lh.updateapk.utils.PatchUtils;
 import com.lh.updateapk.BuildConfig;
 import com.lh.updateapk.Constants;
 import com.lh.updateapk.R;
@@ -97,7 +97,7 @@ public class DownloadService extends IntentService {
                 String newApkPath = dir.getPath() + "/" + newApkName;
                 String patchPath = downloadFile.getPath();
                 Log.i(TAG, "Patch diff...");
-                int patchResult = PatchUtils.patch(oldApkPath, newApkPath, patchPath);
+                int patchResult = PatchUtils.bspatch(oldApkPath, newApkPath, patchPath);
                 if (patchResult == 0) {
                     apkFile = new File(newApkPath);
                 }

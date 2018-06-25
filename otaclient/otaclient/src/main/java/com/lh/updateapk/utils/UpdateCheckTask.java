@@ -2,7 +2,9 @@ package com.lh.updateapk.utils;
 
 import android.content.Context;
 import android.os.AsyncTask;
+import android.text.TextUtils;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.google.gson.annotations.SerializedName;
 import com.lh.updateapk.Constants;
@@ -39,7 +41,7 @@ public class UpdateCheckTask extends AsyncTask<Void, Void, String> {
     @Override
     protected void onPostExecute(String result) {
         UpdateInfo info = GsonUtils.jsonToBean(result, UpdateInfo.class);
-        if (this.mListener != null) {
+        if (this.mListener != null && !TextUtils.isEmpty(result)) {
             this.mListener.onSuccess(info);
         }
     }
@@ -50,7 +52,7 @@ public class UpdateCheckTask extends AsyncTask<Void, Void, String> {
         InputStream is = null;
         BufferedReader buffer = null;
         String result = null;
-        String urlStr = Constants.UPDATE_REQUEST_URL + "?" + Constants.APK_VERSION_CODE+ "=" + InfoUtils.INSTANCE.getVersionCode(this.mContext);
+        String urlStr = Constants.UPDATE_REQUEST_URL + "?" + Constants.APK_VERSION_CODE + "=" + InfoUtils.INSTANCE.getVersionCode(this.mContext);
 
         try {
             URL url = new URL(urlStr);
@@ -67,6 +69,7 @@ public class UpdateCheckTask extends AsyncTask<Void, Void, String> {
             result = strBuilder.toString();
         } catch (Exception e) {
             Log.e(TAG, "http post error");
+            Toast.makeText(mContext,"服务尚未开启",Toast.LENGTH_SHORT).show();
         } finally {
             if (buffer != null) {
                 try {
@@ -111,7 +114,7 @@ public class UpdateCheckTask extends AsyncTask<Void, Void, String> {
         public int mVersionCode;
         @SerializedName("md5")
         public String mMD5;
-
+        @SerializedName("diffUpdate")
         public boolean mDiffUpdate;
     }
 }

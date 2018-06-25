@@ -18,6 +18,7 @@ import android.graphics.Color
 import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
 import android.widget.Toast
+import java.util.zip.ZipFile
 
 /**
  * Created by liuhe on 18/06/19.
@@ -34,6 +35,10 @@ class MainActivity : AppCompatActivity(), UpdateCheckTask.OnCheckListener {
         txt_main_version.text =
                 "versionName：${InfoUtils.getVersionName(this)} " +
                 "versionCode：${InfoUtils.getVersionCode(this)}"
+
+//        println("getFilesDir().getAbsolutePath()" + filesDir.absolutePath)
+
+
         txt_main_version.setBackgroundColor(Color.GREEN)
         btn_main_update_message.setOnClickListener {
             UpdateCheckTask(this@MainActivity, this).execute()
@@ -55,8 +60,8 @@ class MainActivity : AppCompatActivity(), UpdateCheckTask.OnCheckListener {
         mDownloadIntent?.putExtra(Constants.APK_MD5, mUpdateInfo?.mMD5)
         mDownloadIntent?.putExtra(Constants.APK_DIFF_UPDATE, mUpdateInfo?.mDiffUpdate)
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, listOf(Manifest.permission.WRITE_EXTERNAL_STORAGE).toTypedArray(),WRITE_EXTERNAL_STORAGE)
-        }else {
+            ActivityCompat.requestPermissions(this, listOf(Manifest.permission.WRITE_EXTERNAL_STORAGE).toTypedArray(), WRITE_EXTERNAL_STORAGE)
+        } else {
             startService(mDownloadIntent)
         }
     }
@@ -90,6 +95,7 @@ class MainActivity : AppCompatActivity(), UpdateCheckTask.OnCheckListener {
 
     override fun onFailed() {
         txt_main_update_message.text = "升级信息：暂无"
+
     }
 
     override fun onDestroy() {

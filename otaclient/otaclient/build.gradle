@@ -10,9 +10,12 @@ android {
         applicationId "com.lh.updateapk"
         minSdkVersion 15
         targetSdkVersion 27
-        versionCode 1100
-        versionName "v1.1.0"
+        versionCode 1000
+        versionName "v1.0.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        ndk {
+            moduleName = "bsdiff"
+        }
     }
     signingConfigs {
         release {
@@ -22,7 +25,6 @@ android {
             keyPassword '123456'
         }
     }
-
     buildTypes {
         release {
             signingConfig signingConfigs.release
