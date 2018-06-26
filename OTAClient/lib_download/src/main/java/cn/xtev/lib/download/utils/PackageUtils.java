@@ -10,11 +10,15 @@ import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.net.Uri;
 import android.os.Build;
+import android.os.RecoverySystem;
 import android.provider.Settings;
 import android.text.TextUtils;
 import android.util.Log;
+import android.widget.Toast;
 
 import java.io.File;
+import java.io.IOException;
+import java.security.GeneralSecurityException;
 import java.util.List;
 
 /**
@@ -79,6 +83,54 @@ public class PackageUtils {
         }
         return installNormal(context, filePath) ? INSTALL_SUCCEEDED : INSTALL_FAILED_INVALID_URI;
     }
+
+    public static boolean installOtaPackageAuto(final Context context, File file) {
+
+        String internalPath = "/data/recovery/ota.zip";
+        String cmd = "cat " + file.getAbsolutePath() + " > " + internalPath;
+
+        ShellUtils.execCommand(cmd, true);
+
+        File otaPackageFile = new File(internalPath);
+
+        try {
+            RecoverySystem.verifyPackage(otaPackageFile, null, null);
+        } catch (IOException e) {
+            ThreadUtils.runOnUIThread(new Runnable() {
+                @Override
+                public void run() {
+                    Toast.makeText(context, "RecoverySystem verifyPackage failed, file doesn't exist", Toast.LENGTH_LONG).show();
+                }
+            });
+            e.printStackTrace();
+            return false;
+        } catch (GeneralSecurityException e) {
+            ThreadUtils.runOnUIThread(new Runnable() {
+                @Override
+                public void run() {
+                    Toast.makeText(context, "RecoverySystem verifyPackage failed, invalid package", Toast.LENGTH_LONG).show();
+                }
+            });
+
+            e.printStackTrace();
+            return false;
+        }
+
+        try {
+            RecoverySystem.installPackage(context, otaPackageFile);
+        } catch (IOException e) {
+            ThreadUtils.runOnUIThread(new Runnable() {
+                @Override
+                public void run() {
+                    Toast.makeText(context, "RecoverySystem installPackage error, failed to install", Toast.LENGTH_LONG).show();
+                }
+            });
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+    }
+
 
     /**
      * install package normal by system intent
